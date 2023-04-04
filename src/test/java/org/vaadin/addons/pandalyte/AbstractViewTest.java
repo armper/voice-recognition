@@ -1,6 +1,5 @@
-package org.vaadin.addons.mygroup;
+package org.vaadin.addons.pandalyte;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -9,6 +8,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.parallel.ParallelTest;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 /**
  * Base class for ITs

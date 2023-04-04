@@ -1,4 +1,4 @@
-package org.vaadin.addons.mygroup;
+package org.vaadin.addons.pandalyte;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,11 +9,11 @@ public class ViewIT extends AbstractViewTest {
 
     @Test
     public void componentWorks() {
-        final TestBenchElement axaInputText = $("axa-input-text").waitForFirst();
+        final TestBenchElement voiceRecognition = $("voice-recognition").waitForFirst();
         // Check that axa-text contains at least one other element, which means that
         // is has been upgraded to a custom element and not just rendered as an empty
         // tag
         Assert.assertTrue(
-                axaInputText.$(TestBenchElement.class).all().size() > 0);
+                voiceRecognition.$(TestBenchElement.class).all().size() > 0);
     }
 }
