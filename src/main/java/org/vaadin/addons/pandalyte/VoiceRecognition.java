@@ -26,7 +26,16 @@ public class VoiceRecognition extends Component {
 
     @Synchronize("speech")
     public String getSpeech() {
-        return getElement().getProperty("speech", "none java");
+        return getElement().getProperty("speech", "");
+    }
+
+    public void setUseInternalButtons(boolean useInternalButtons) {
+        getElement().setProperty("useInternalButtons", useInternalButtons);
+    }
+
+    @Synchronize("useInternalButtons")
+    public boolean isUseInternalButtons() {
+        return getElement().getProperty("useInternalButtons", true);
     }
 
     public void start() {

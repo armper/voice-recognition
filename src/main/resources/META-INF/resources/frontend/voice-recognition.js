@@ -54,7 +54,7 @@ class VoiceRecognition extends LitElement {
       continuous: { type: Boolean },
       speech: { type: String },
       isRecording: { type: Boolean },
-
+      useInternalButtons: { type: Boolean },
     };
   }
 
@@ -63,6 +63,8 @@ class VoiceRecognition extends LitElement {
     this.initializeRecognition();
     this.speech = `Press the 'Start' button to start recording your voice.`;
     this.isRecording = false;
+    this.lastResultIndex = 0;
+    this.useInternalButtons = true;
   }
 
   connectedCallback() {
@@ -83,6 +85,9 @@ class VoiceRecognition extends LitElement {
       SpeechRecognition !== undefined
         ? new SpeechRecognition()
         : console.error('Your browser does not support the Web Speech API');
+
+    this.useInternalButtons = this.hasAttribute('use-internal-buttons') || true;
+
   }
 
   initializeAttributes() {
@@ -108,24 +113,28 @@ class VoiceRecognition extends LitElement {
     );
 
     this.recognition.addEventListener('result', (e) => {
-      this.speech = [...Array(e.results.length).keys()]
-        .slice(e.resultIndex)
-        .map((i) => e.results[i][0].transcript)
-        .reduce((a, b) => a + b, this.speech);
+      const newResults = [...Array(e.results.length).keys()]
+        .slice(this.lastResultIndex)
+        .map((i) => e.results[i][0].transcript);
+      this.speech = this.speech + newResults.join(' ');
+      this.lastResultIndex = e.results.length;
 
       this.dispatchEvent(new CustomEvent('speechResult', { detail: { speech: this.speech } }));
     });
+
   }
 
   start() {
     if (!this.isRecording) {
       this.recognition.start();
       this.isRecording = true;
+      this.lastResultIndex = 0; // Add this line
     } else {
       this.recognition.stop();
       this.isRecording = false;
     }
   }
+
 
   stop() {
     this.recognition.stop();
@@ -142,16 +151,21 @@ class VoiceRecognition extends LitElement {
   render() {
     return html`
       <slot></slot>
-      <button
-        class="${this.isRecording ? 'recording' : ''}"
-        @click="${this.start}"
-      >
-        ${this.isRecording ? 'Stop' : 'Start'}
-      </button>
-      <button class="clear-speech" @click="${this.clearSpeech}">Clear Speech</button>
+      ${this.useInternalButtons
+        ? html`
+            <button
+              class="${this.isRecording ? 'recording' : ''}"
+              @click="${this.start}"
+            >
+              ${this.isRecording ? 'Stop' : 'Start'}
+            </button>
+            <button class="clear-speech" @click="${this.clearSpeech}">Clear Speech</button>
+          `
+        : ''}
       <p>${this.speech}</p>
     `;
   }
+
 }
 
 customElements.define('voice-recognition', VoiceRecognition);
