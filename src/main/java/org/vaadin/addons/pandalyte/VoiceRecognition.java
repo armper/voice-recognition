@@ -24,7 +24,7 @@ public class VoiceRecognition extends Component {
         return getElement().getProperty("continuous", true);
     }
 
-    @Synchronize("myresult")
+    @Synchronize("speech")
     public String getSpeech() {
         return getElement().getProperty("speech", "none java");
     }
